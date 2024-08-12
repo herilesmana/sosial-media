@@ -27,4 +27,11 @@ class PostController extends Controller
 
         return response()->json($post, 201);
     }
+
+    public function data()
+    {
+        $posts = Post::with('user')->latest()->get();
+
+        return response()->json($posts);
+    }
 }

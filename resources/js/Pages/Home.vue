@@ -42,6 +42,20 @@ import { Head } from '@inertiajs/vue3';
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-5">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-5">
                     <h3 class="mb-3 text-xl">All Posts</h3>
+                    <div class="post-list">
+                        <div v-for="post in posts" :key="post.id" class="post mb-6 p-4 border rounded-lg shadow-sm">
+                        <div class="post-header mb-2">
+                            <h2 class="font-bold text-lg">{{ post.user.name }}</h2>
+                            <p class="text-sm text-gray-500">{{ formatDate(post.created_at) }}</p>
+                        </div>
+                        <div class="post-content mb-2">
+                            <p v-if="post.content">{{ post.content }}</p>
+                            <a v-if="post.attachment" :href="getAttachmentUrl(post.attachment)" target="_blank" class="text-blue-500 hover:underline">
+                            View Attachment
+                            </a>
+                        </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -53,7 +67,8 @@ export default {
   data() {
     return {
       content: '',
-      attachment: null
+      attachment: null,
+      posts: []
     };
   },
   methods: {
@@ -84,7 +99,24 @@ export default {
       } catch (error) {
         console.error('There was an error creating the post:', error);
       }
+    },
+    async fetchPosts() {
+      try {
+        const response = await axios.get('posts');
+        this.posts = response.data;
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    },
+    formatDate(date) {
+      return new Date(date).toLocaleString();
+    },
+    getAttachmentUrl(path) {
+      return `/storage/${path}`;
     }
+  },
+  created() {
+    this.fetchPosts();
   }
 };
 </script>
