@@ -3,6 +3,7 @@
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -27,6 +28,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/posts', [PostController::class, 'store']);
     Route::get('/posts', [PostController::class, 'data']);
+
+    Route::get('/manage-posts', [PostController::class, 'manage'])->name('manage-posts');
+    Route::get('/manage-users', [UserController::class, 'manage'])->name('manage-users');
 
     Route::post('/comments', [CommentController::class, 'store'])->middleware('auth');
 });

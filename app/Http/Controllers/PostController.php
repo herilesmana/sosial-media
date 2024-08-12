@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class PostController extends Controller
 {
@@ -35,5 +36,17 @@ class PostController extends Controller
         ->latest()->get();
 
         return response()->json($posts);
+    }
+    
+    public function manage()
+    {
+        $posts = Post::with('user')
+        ->with('comments.user')
+        ->withCount('comments')
+        ->latest()->paginate(10);
+
+        return Inertia::render('ManagePosts', [
+            'posts' => $posts,
+        ]);
     }
 }
