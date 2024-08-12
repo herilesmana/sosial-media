@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -26,6 +27,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/posts', [PostController::class, 'store']);
     Route::get('/posts', [PostController::class, 'data']);
+
+    Route::post('/comments', [CommentController::class, 'store'])->middleware('auth');
 });
 
 require __DIR__.'/auth.php';

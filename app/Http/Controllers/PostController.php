@@ -30,7 +30,9 @@ class PostController extends Controller
 
     public function data()
     {
-        $posts = Post::with('user')->latest()->get();
+        $posts = Post::with('user')
+        ->with('comments.user')
+        ->latest()->get();
 
         return response()->json($posts);
     }
